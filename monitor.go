@@ -92,14 +92,15 @@ func checkSites() {
 }
 
 func isUp(url string) bool {
-	_, err := http.Get("http://" + url)
-	if err != nil {
-		_, serr := http.Get("https://" + url)
-		if serr != nil {
-			return false
-		}
+	result, err := http.Get("http://" + url)
+	sresult, serr := http.Get("https://" + url)
+	if err != nil || serr != nil {
+		return false
 	}
-	return true
+	if result.StatusCode == 200 || sresult.StatusCode == 200 {
+		return true
+	}
+	return false
 }
 
 func registerLog(url string) {
